@@ -3,11 +3,10 @@
 import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
-import { revalidateTag } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import {
   getAuthHeaders,
-  getCacheOptions,
   getCacheTag,
   getCartId,
   removeCartId,
@@ -34,10 +33,6 @@ export async function retrieveCart(cartId?: string, fields?: string) {
     ...(await getAuthHeaders()),
   }
 
-  const next = {
-    ...(await getCacheOptions("carts")),
-  }
-
   return await sdk.client
     .fetch<HttpTypes.StoreCartResponse>(`/store/carts/${id}`, {
       method: "GET",
@@ -45,8 +40,7 @@ export async function retrieveCart(cartId?: string, fields?: string) {
         fields,
       },
       headers,
-      next,
-      cache: "force-cache",
+      cache: "no-store", // selalu ambil data terbaru, jangan di-cache
     })
     .then(({ cart }: { cart: HttpTypes.StoreCart }) => cart)
     .catch(() => null)
@@ -155,6 +149,8 @@ export async function addToCart({
       revalidateTag(fulfillmentCacheTag, { expire: 0 })
     })
     .catch(medusaError)
+
+  revalidatePath("/", "layout")
 }
 
 export async function updateLineItem({
@@ -188,6 +184,8 @@ export async function updateLineItem({
       revalidateTag(fulfillmentCacheTag, { expire: 0 })
     })
     .catch(medusaError)
+
+  revalidatePath("/", "layout")
 }
 
 export async function deleteLineItem(lineId: string) {
@@ -215,6 +213,8 @@ export async function deleteLineItem(lineId: string) {
       revalidateTag(fulfillmentCacheTag, { expire: 0 })
     })
     .catch(medusaError)
+
+  revalidatePath("/", "layout")
 }
 
 export async function setShippingMethod({
@@ -230,6 +230,44 @@ export async function setShippingMethod({
 
   return sdk.store.cart
     .addShippingMethod(cartId, { option_id: shippingMethodId }, {}, headers)
+    .then(async () => {
+      const cartCacheTag = await getCacheTag("carts")
+      revalidateTag(cartCacheTag, { expire: 0 })
+    })
+    .catch(medusaError)
+}
+
+/**
+ * Menyimpan pilihan pembayaran pelanggan (transfer / qris / cod)
+ * dan bank tujuan (khusus transfer) ke metadata keranjang,
+ * supaya terlihat di pesanan.
+ */
+export async function setPaymentChoice(
+  choice: "transfer" | "qris" | "cod",
+  bank?: "bca" | "bri" | "bni" | "mandiri"
+) {
+  const cartId = await getCartId()
+
+  if (!cartId) {
+    throw new Error("No existing cart found")
+  }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  return sdk.store.cart
+    .update(
+      cartId,
+      {
+        metadata: {
+          payment_choice: choice,
+          ...(bank ? { payment_bank: bank } : {}),
+        },
+      },
+      {},
+      headers
+    )
     .then(async () => {
       const cartCacheTag = await getCacheTag("carts")
       revalidateTag(cartCacheTag, { expire: 0 })
@@ -279,46 +317,16 @@ export async function applyPromotions(codes: string[]) {
 }
 
 export async function applyGiftCard(code: string) {
-  //   const cartId = getCartId()
-  //   if (!cartId) return "No cartId cookie found"
-  //   try {
-  //     await updateCart(cartId, { gift_cards: [{ code }] }).then(() => {
-  //       revalidateTag("cart")
-  //     })
-  //   } catch (error: any) {
-  //     throw error
-  //   }
+  // Belum diimplementasikan (sama seperti starter bawaan Medusa)
 }
 
 export async function removeDiscount(code: string) {
-  // const cartId = getCartId()
-  // if (!cartId) return "No cartId cookie found"
-  // try {
-  //   await deleteDiscount(cartId, code)
-  //   revalidateTag("cart")
-  // } catch (error: any) {
-  //   throw error
-  // }
+  // Belum diimplementasikan (sama seperti starter bawaan Medusa)
 }
 
-export async function removeGiftCard(
-  codeToRemove: string,
-  giftCards: any[]
-  // giftCards: GiftCard[]
-) {
-  //   const cartId = getCartId()
-  //   if (!cartId) return "No cartId cookie found"
-  //   try {
-  //     await updateCart(cartId, {
-  //       gift_cards: [...giftCards]
-  //         .filter((gc) => gc.code !== codeToRemove)
-  //         .map((gc) => ({ code: gc.code })),
-  //     }).then(() => {
-  //       revalidateTag("cart")
-  //     })
-  //   } catch (error: any) {
-  //     throw error
-  //   }
+export async function removeGiftCard(codeToRemove: string, giftCards: any[]) {
+  // Belum diimplementasikan (sama seperti starter bawaan Medusa).
+  // Versi lama memakai gift_cards, yang tidak ada di Medusa v2.
 }
 
 export async function submitPromotionForm(
@@ -339,7 +347,7 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     if (!formData) {
       throw new Error("No form data found when setting addresses")
     }
-    const cartId = getCartId()
+    const cartId = await getCartId()
     if (!cartId) {
       throw new Error("No existing cart found when setting addresses")
     }
@@ -458,16 +466,12 @@ export async function listCartOptions() {
   const headers = {
     ...(await getAuthHeaders()),
   }
-  const next = {
-    ...(await getCacheOptions("shippingOptions")),
-  }
 
   return await sdk.client.fetch<{
     shipping_options: HttpTypes.StoreCartShippingOption[]
   }>("/store/shipping-options", {
     query: { cart_id: cartId },
-    next,
     headers,
-    cache: "force-cache",
+    cache: "no-store", // opsi pengiriman bergantung pada isi keranjang
   })
 }

@@ -15,20 +15,20 @@ const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
     <div>
       <div className="mb-6 flex flex-col gap-y-2">
         <p className="text-[10px] tracking-[4px] text-[#a18d72]">
-          YOUR SELECTION
+          Koleksimu
         </p>
         <h1 className="font-serif text-3xl font-light md:text-4xl">
-          Shopping Bag
+          Tas Belanja
         </h1>
       </div>
       <Table>
         <Table.Header className="border-t-0">
           <Table.Row className="text-[10px] uppercase tracking-[3px] text-[#77746d]">
-            <Table.HeaderCell className="!pl-0">Item</Table.HeaderCell>
+            <Table.HeaderCell className="!pl-0">Barang</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell>Quantity</Table.HeaderCell>
+            <Table.HeaderCell>Jumlah</Table.HeaderCell>
             <Table.HeaderCell className="hidden small:table-cell">
-              Price
+              Harga
             </Table.HeaderCell>
             <Table.HeaderCell className="!pr-0 text-right">
               Total

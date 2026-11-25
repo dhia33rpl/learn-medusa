@@ -8,7 +8,6 @@ import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import {
   getAuthHeaders,
-  getCacheOptions,
   getCacheTag,
   getCartId,
   getPendingCustomer,
@@ -43,26 +42,23 @@ export const retrieveCustomer =
 
     if (!("authorization" in authHeaders)) return null
 
-    const headers = {
-      ...authHeaders,
-    }
-
-    const next = {
-      ...(await getCacheOptions("customers")),
-    }
-
-    return await sdk.client
-      .fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
+    try {
+      const { customer } = await sdk.client.fetch<{
+        customer: HttpTypes.StoreCustomer
+      }>("/store/customers/me", {
         method: "GET",
         query: {
-          fields: "*orders",
+          fields: "*orders,*addresses",
         },
-        headers,
-        next,
-        cache: "force-cache",
+        headers: authHeaders,
+        cache: "no-store",
       })
-      .then(({ customer }) => customer)
-      .catch(() => null)
+
+      return customer
+    } catch (error) {
+      console.error("Gagal mengambil data customer:", error)
+      return null
+    }
   }
 
 export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
@@ -266,16 +262,16 @@ export const addCustomerAddress = async (
   const isDefaultShipping = (currentState.isDefaultShipping as boolean) || false
 
   const address = {
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    company: formData.get("company") as string,
-    address_1: formData.get("address_1") as string,
-    address_2: formData.get("address_2") as string,
-    city: formData.get("city") as string,
-    postal_code: formData.get("postal_code") as string,
-    province: formData.get("province") as string,
-    country_code: formData.get("country_code") as string,
-    phone: formData.get("phone") as string,
+    first_name: (formData.get("first_name") as string) || "",
+    last_name: (formData.get("last_name") as string) || "",
+    company: (formData.get("company") as string) || "",
+    address_1: (formData.get("address_1") as string) || "",
+    address_2: (formData.get("address_2") as string) || "",
+    city: (formData.get("city") as string) || "",
+    postal_code: (formData.get("postal_code") as string) || "",
+    province: (formData.get("province") as string) || "",
+    country_code: (formData.get("country_code") as string) || "",
+    phone: (formData.get("phone") as string) || "",
     is_default_billing: isDefaultBilling,
     is_default_shipping: isDefaultShipping,
   }
@@ -289,6 +285,7 @@ export const addCustomerAddress = async (
     .then(async () => {
       const customerCacheTag = await getCacheTag("customers")
       revalidateTag(customerCacheTag, { expire: 0 })
+
       return { success: true, error: null }
     })
     .catch((err) => {
@@ -298,21 +295,28 @@ export const addCustomerAddress = async (
 
 export const deleteCustomerAddress = async (
   addressId: string
-): Promise<void> => {
+): Promise<{ success: boolean; error: string | null }> => {
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  await sdk.store.customer
-    .deleteAddress(addressId, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag, { expire: 0 })
-      return { success: true, error: null }
-    })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
-    })
+  try {
+    await sdk.store.customer.deleteAddress(addressId, headers)
+
+    const customerCacheTag = await getCacheTag("customers")
+    revalidateTag(customerCacheTag, { expire: 0 })
+
+    return { success: true, error: null }
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err)
+
+    console.error("Gagal menghapus alamat:", errorMessage)
+
+    return {
+      success: false,
+      error: errorMessage,
+    }
+  }
 }
 
 export const updateCustomerAddress = async (
@@ -323,19 +327,22 @@ export const updateCustomerAddress = async (
     (currentState.addressId as string) || (formData.get("addressId") as string)
 
   if (!addressId) {
-    return { success: false, error: "Address ID is required" }
+    return {
+      success: false,
+      error: "Address ID is required",
+    }
   }
 
   const address = {
-    first_name: formData.get("first_name") as string,
-    last_name: formData.get("last_name") as string,
-    company: formData.get("company") as string,
-    address_1: formData.get("address_1") as string,
-    address_2: formData.get("address_2") as string,
-    city: formData.get("city") as string,
-    postal_code: formData.get("postal_code") as string,
-    province: formData.get("province") as string,
-    country_code: formData.get("country_code") as string,
+    first_name: (formData.get("first_name") as string) || "",
+    last_name: (formData.get("last_name") as string) || "",
+    company: (formData.get("company") as string) || "",
+    address_1: (formData.get("address_1") as string) || "",
+    address_2: (formData.get("address_2") as string) || "",
+    city: (formData.get("city") as string) || "",
+    postal_code: (formData.get("postal_code") as string) || "",
+    province: (formData.get("province") as string) || "",
+    country_code: (formData.get("country_code") as string) || "",
   } as HttpTypes.StoreUpdateCustomerAddress
 
   const phone = formData.get("phone") as string
@@ -348,14 +355,24 @@ export const updateCustomerAddress = async (
     ...(await getAuthHeaders()),
   }
 
-  return sdk.store.customer
-    .updateAddress(addressId, address, {}, headers)
-    .then(async () => {
-      const customerCacheTag = await getCacheTag("customers")
-      revalidateTag(customerCacheTag, { expire: 0 })
-      return { success: true, error: null }
-    })
-    .catch((err) => {
-      return { success: false, error: err.toString() }
-    })
+  try {
+    await sdk.store.customer.updateAddress(addressId, address, {}, headers)
+
+    const customerCacheTag = await getCacheTag("customers")
+    revalidateTag(customerCacheTag, { expire: 0 })
+
+    return {
+      success: true,
+      error: null,
+    }
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err)
+
+    console.error("Gagal memperbarui alamat:", errorMessage)
+
+    return {
+      success: false,
+      error: errorMessage,
+    }
+  }
 }

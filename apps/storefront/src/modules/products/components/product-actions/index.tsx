@@ -7,11 +7,10 @@ import { isVariantInStock } from "@lib/util/inventory"
 import { HttpTypes } from "@medusajs/types"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
-import { useParams, usePathname } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
-import { useRouter } from "next/navigation"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -37,11 +36,11 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const router = useRouter()
   const pathname = usePathname()
-  // Preselected on the server so the form posts a valid variant without JavaScript.
-  // The page is statically rendered, so `?v_id=` is applied after hydration.
+
   const [options, setOptions] = useState<Record<string, string | undefined>>(
     () => optionsAsKeymap(getDefaultVariant(product)?.options ?? null) ?? {}
   )
+
   const [isUrlVariantApplied, setIsUrlVariantApplied] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
@@ -57,7 +56,7 @@ export default function ProductActions({
     })
   }, [product.variants, options])
 
-  // update the options when a variant is selected
+  // Memperbarui pilihan ketika varian dipilih
   const setOptionValue = (optionId: string, value: string) => {
     setOptions((prev) => ({
       ...prev,
@@ -65,7 +64,7 @@ export default function ProductActions({
     }))
   }
 
-  //check if the selected options produce a valid variant
+  // Memeriksa apakah pilihan menghasilkan varian yang valid
   const isValidVariant = useMemo(() => {
     return product.variants?.some((v) => {
       const variantOptions = optionsAsKeymap(v.options)
@@ -76,9 +75,11 @@ export default function ProductActions({
   useEffect(() => {
     const variantId = new URLSearchParams(window.location.search).get("v_id")
     const variant = product.variants?.find((v) => v.id === variantId)
+
     if (variant) {
       setOptions(optionsAsKeymap(variant.options) ?? {})
     }
+
     setIsUrlVariantApplied(true)
   }, [product.variants])
 
@@ -109,10 +110,9 @@ export default function ProductActions({
   )
 
   const actionsRef = useRef<HTMLDivElement>(null)
-
   const inView = useIntersection(actionsRef, "0px")
 
-  // add the selected variant to the cart
+  // Menambahkan varian yang dipilih ke keranjang
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
 
@@ -123,8 +123,9 @@ export default function ProductActions({
       quantity: 1,
       countryCode,
     })
+
     notifyCartUpdated()
-    router.refresh() // muat ulang data server, supaya angka BAG di navbar ikut naik
+    router.refresh()
 
     setIsAdding(false)
   }
@@ -152,11 +153,13 @@ export default function ProductActions({
           }}
         >
           <input type="hidden" name="product_id" value={product.id} />
+
           <input
             type="hidden"
             name="variant_id"
             value={isValidVariant ? selectedVariant?.id ?? "" : ""}
           />
+
           <input type="hidden" name="quantity" value="1" />
 
           <div>
@@ -190,7 +193,7 @@ export default function ProductActions({
               className="text-[10px] uppercase tracking-[3px] text-[#77746d]"
               data-testid="product-availability"
             >
-              {inStock ? "In stock" : "Out of stock"}
+              {inStock ? "Tersedia" : "Stok habis"}
             </p>
           )}
 
@@ -201,14 +204,15 @@ export default function ProductActions({
             data-testid="add-product-button"
           >
             {isAdding
-              ? "Adding..."
+              ? "Menambahkan..."
               : !selectedVariant
-              ? "Select variant"
+              ? "Pilih varian"
               : !inStock || !isValidVariant
-              ? "Out of stock"
-              : "Add to cart"}
+              ? "Stok habis"
+              : "Tambah ke keranjang"}
           </button>
         </form>
+
         <MobileActions
           product={product}
           variant={selectedVariant}

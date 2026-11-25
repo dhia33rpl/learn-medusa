@@ -68,7 +68,7 @@ export default function CategoryTemplate({
             </p>
           ) : (
             <p className="mb-3 text-[10px] tracking-[4px] text-[#a18d72]">
-              DISCOVER YOUR STYLE
+              TEMUKAN GAYAMU
             </p>
           )}
 

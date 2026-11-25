@@ -1,7 +1,10 @@
+"use client"
+
 import { deleteLineItem } from "@lib/data/cart"
-import { notifyCartUpdated } from "@lib/util/cart-events"
-import { Spinner, Trash } from "@medusajs/icons"
-import { clx } from "@modules/common/components/ui"
+import Spinner from "@modules/common/icons/spinner"
+import Trash from "@modules/common/icons/trash"
+import { clx } from "@medusajs/ui"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const DeleteButton = ({
@@ -13,13 +16,14 @@ const DeleteButton = ({
   children?: React.ReactNode
   className?: string
 }) => {
+  const router = useRouter() // <- BARU
   const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async (id: string) => {
     setIsDeleting(true)
     await deleteLineItem(id)
-      .then(notifyCartUpdated)
-      .catch((_err) => {
+      .then(() => router.refresh()) // <- BARU: paksa halaman ambil data terbaru
+      .catch(() => {
         setIsDeleting(false)
       })
   }

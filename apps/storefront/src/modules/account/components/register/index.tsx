@@ -23,10 +23,12 @@ const Register = ({ setCurrentView }: Props) => {
       <h1 className="text-large-semi uppercase mb-6">
         Become a Medusa Store Member
       </h1>
+
       <p className="text-center text-base-regular text-ui-fg-base mb-4">
         Create your Medusa Store Member profile, and get access to an enhanced
         shopping experience.
       </p>
+
       {message?.state === "verification_required" && (
         <div
           className="w-full mb-4 text-center text-base-regular text-ui-fg-base bg-ui-bg-subtle border border-ui-border-base rounded-rounded p-4"
@@ -36,6 +38,7 @@ const Register = ({ setCurrentView }: Props) => {
           Please check your inbox to verify your email, then sign in.
         </div>
       )}
+
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
           <Input
@@ -45,13 +48,15 @@ const Register = ({ setCurrentView }: Props) => {
             autoComplete="given-name"
             data-testid="first-name-input"
           />
+
+          {/* Last name sekarang opsional */}
           <Input
-            label="Last name"
+            label="Last name (Opsional)"
             name="last_name"
-            required
             autoComplete="family-name"
             data-testid="last-name-input"
           />
+
           <Input
             label="Email"
             name="email"
@@ -60,6 +65,7 @@ const Register = ({ setCurrentView }: Props) => {
             autoComplete="email"
             data-testid="email-input"
           />
+
           <Input
             label="Phone"
             name="phone"
@@ -67,6 +73,7 @@ const Register = ({ setCurrentView }: Props) => {
             autoComplete="tel"
             data-testid="phone-input"
           />
+
           <Input
             label="Password"
             name="password"
@@ -76,10 +83,12 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="password-input"
           />
         </div>
+
         <ErrorMessage
           error={message?.state === "error" ? message.error : null}
           data-testid="register-error"
         />
+
         <span className="text-center text-ui-fg-base text-small-regular mt-6">
           By creating an account, you agree to Medusa Store&apos;s{" "}
           <LocalizedClientLink
@@ -97,10 +106,12 @@ const Register = ({ setCurrentView }: Props) => {
           </LocalizedClientLink>
           .
         </span>
+
         <SubmitButton className="w-full mt-6" data-testid="register-button">
           Join
         </SubmitButton>
       </form>
+
       <span className="text-center text-ui-fg-base text-small-regular mt-6">
         Already a member?{" "}
         <button

@@ -1,19 +1,22 @@
-import { configureStoreSearch, defineMiddlewares } from '@medusajs/framework/http'
+import { defineMiddlewares, authenticate } from "@medusajs/framework/http";
+import multer from "multer";
 
-// The product index declares filterable `status` and `sales_channel_ids`, so
-// the route narrows it to published products in the key's sales channels.
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
+
 export default defineMiddlewares({
   routes: [
     {
-      method: ['POST'],
-      matcher: '/store/search',
+      method: ["POST"],
+      matcher: "/store/orders/:id/payment-proof",
       middlewares: [
-        configureStoreSearch({
-          allowed_indexes: {
-            product: true,
-          },
-        }),
+        authenticate("customer", ["session", "bearer"]),
+        upload.single("file") as any,
       ],
     },
   ],
-})
+});
+
+

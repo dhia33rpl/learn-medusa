@@ -78,7 +78,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
               className="text-[10px] uppercase tracking-[3px] text-[#a18d72] underline underline-offset-4 transition hover:text-[#24231f]"
               data-testid="add-discount-button"
             >
-              Add Promotion Code(s)
+              Tambahkan Kode Promosi
             </button>
           </div>
 
@@ -109,7 +109,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
           <div className="flex w-full items-center">
             <div className="flex w-full flex-col">
               <p className="mb-2 text-[10px] uppercase tracking-[3px] text-[#77746d]">
-                Promotion(s) applied
+                Kode promosi telah di terapkan
               </p>
 
               {promotions.map((promotion) => {

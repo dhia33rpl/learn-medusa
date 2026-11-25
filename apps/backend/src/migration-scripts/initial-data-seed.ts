@@ -33,7 +33,7 @@ export default async function initial_data_seed({
   const link = container.resolve(ContainerRegistrationKeys.LINK);
   const query = container.resolve(ContainerRegistrationKeys.QUERY);
   const fulfillmentModuleService = container.resolve(
-    ModuleRegistrationName.FULFILLMENT
+    ModuleRegistrationName.FULFILLMENT,
   );
 
   const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
@@ -124,7 +124,7 @@ export default async function initial_data_seed({
 
   logger.info("Seeding stock location data...");
   const { result: stockLocationResult } = await createStockLocationsWorkflow(
-    container
+    container,
   ).run({
     input: {
       locations: [
@@ -210,14 +210,14 @@ export default async function initial_data_seed({
   await createShippingOptionsWorkflow(container).run({
     input: [
       {
-        name: "Standard Shipping",
+        name: "Pengiriman Reguler",
         price_type: "flat",
         provider_id: "manual_manual",
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
-          label: "Standard",
-          description: "Ship in 2-3 days.",
+          label: "Reguler",
+          description: "Dikirim dalam 2–3 hari.",
           code: "standard",
         },
         prices: [
@@ -248,14 +248,14 @@ export default async function initial_data_seed({
         ],
       },
       {
-        name: "Express Shipping",
+        name: "Pengiriman Ekspres",
         price_type: "flat",
         provider_id: "manual_manual",
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
-          label: "Express",
-          description: "Ship in 24 hours.",
+          label: "Ekspres",
+          description: "Dikirim dalam 24 jam.",
           code: "express",
         },
         prices: [
@@ -300,24 +300,24 @@ export default async function initial_data_seed({
   logger.info("Seeding product data...");
 
   const { result: categoryResult } = await createProductCategoriesWorkflow(
-    container
+    container,
   ).run({
     input: {
       product_categories: [
         {
-          name: "Shirts",
+          name: "Kaos",
           is_active: true,
         },
         {
-          name: "Sweatshirts",
+          name: "Sweater",
           is_active: true,
         },
         {
-          name: "Pants",
+          name: "Celana",
           is_active: true,
         },
         {
-          name: "Merch",
+          name: "Celana Pendek",
           is_active: true,
         },
       ],
@@ -325,34 +325,32 @@ export default async function initial_data_seed({
   });
 
   const { result: productOptionsResult } = await createProductOptionsWorkflow(
-    container
+    container,
   ).run({
     input: {
       product_options: [
         {
-          title: "Size",
+          title: "Ukuran",
           values: ["S", "M", "L", "XL"],
         },
         {
-          title: "Color",
-          values: ["Black", "White"],
+          title: "Warna",
+          values: ["Hitam", "Putih"],
         },
       ],
     },
   });
-  const sizeOption = productOptionsResult.find((o) => o.title === "Size")!;
-  const colorOption = productOptionsResult.find((o) => o.title === "Color")!;
+  const sizeOption = productOptionsResult.find((o) => o.title === "Ukuran")!;
+  const colorOption = productOptionsResult.find((o) => o.title === "Warna")!;
 
   await createProductsWorkflow(container).run({
     input: {
       products: [
         {
-          title: "Medusa T-Shirt",
-          category_ids: [
-            categoryResult.find((cat) => cat.name === "Shirts")!.id,
-          ],
+          title: "Kaos Medusa",
+          category_ids: [categoryResult.find((cat) => cat.name === "Kaos")!.id],
           description:
-            "Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.",
+            "Kaos berbahan katun berkualitas yang lembut dan nyaman digunakan. Cocok untuk melengkapi gaya kasual sehari-hari.",
           handle: "t-shirt",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -371,17 +369,14 @@ export default async function initial_data_seed({
               url: "https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png",
             },
           ],
-          options: [
-            { id: sizeOption.id },
-            { id: colorOption.id },
-          ],
+          options: [{ id: sizeOption.id }, { id: colorOption.id }],
           variants: [
             {
-              title: "S / Black",
+              title: "S / Hitam",
               sku: "SHIRT-S-BLACK",
               options: {
-                Size: "S",
-                Color: "Black",
+                Ukuran: "S",
+                Warna: "Hitam",
               },
               prices: [
                 {
@@ -395,11 +390,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "S / White",
+              title: "S / Putih",
               sku: "SHIRT-S-WHITE",
               options: {
-                Size: "S",
-                Color: "White",
+                Ukuran: "S",
+                Warna: "Putih",
               },
               prices: [
                 {
@@ -413,11 +408,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M / Black",
+              title: "M / Hitam",
               sku: "SHIRT-M-BLACK",
               options: {
-                Size: "M",
-                Color: "Black",
+                Ukuran: "M",
+                Warna: "Hitam",
               },
               prices: [
                 {
@@ -431,11 +426,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "M / White",
+              title: "M / Putih",
               sku: "SHIRT-M-WHITE",
               options: {
-                Size: "M",
-                Color: "White",
+                Ukuran: "M",
+                Warna: "Putih",
               },
               prices: [
                 {
@@ -449,11 +444,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L / Black",
+              title: "L / Hitam",
               sku: "SHIRT-L-BLACK",
               options: {
-                Size: "L",
-                Color: "Black",
+                Ukuran: "L",
+                Warna: "Hitam",
               },
               prices: [
                 {
@@ -467,11 +462,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "L / White",
+              title: "L / Putih",
               sku: "SHIRT-L-WHITE",
               options: {
-                Size: "L",
-                Color: "White",
+                Ukuran: "L",
+                Warna: "Putih",
               },
               prices: [
                 {
@@ -485,11 +480,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL / Black",
+              title: "XL / Hitam",
               sku: "SHIRT-XL-BLACK",
               options: {
-                Size: "XL",
-                Color: "Black",
+                Ukuran: "XL",
+                Warna: "Hitam",
               },
               prices: [
                 {
@@ -503,11 +498,11 @@ export default async function initial_data_seed({
               ],
             },
             {
-              title: "XL / White",
+              title: "XL / Putih",
               sku: "SHIRT-XL-WHITE",
               options: {
-                Size: "XL",
-                Color: "White",
+                Ukuran: "XL",
+                Warna: "Putih",
               },
               prices: [
                 {
@@ -528,12 +523,12 @@ export default async function initial_data_seed({
           ],
         },
         {
-          title: "Medusa Sweatshirt",
+          title: "Sweater Medusa",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Sweatshirts")!.id,
+            categoryResult.find((cat) => cat.name === "Sweater")!.id,
           ],
           description:
-            "Reimagine the feeling of a classic sweatshirt. With our cotton sweatshirt, everyday essentials no longer have to be ordinary.",
+            "Sweater berbahan lembut dan nyaman dengan desain kasual yang stylish. Cocok digunakan untuk aktivitas sehari-hari.",
           handle: "sweatshirt",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -552,7 +547,7 @@ export default async function initial_data_seed({
               title: "S",
               sku: "SWEATSHIRT-S",
               options: {
-                Size: "S",
+                Ukuran: "S",
               },
               prices: [
                 {
@@ -569,7 +564,7 @@ export default async function initial_data_seed({
               title: "M",
               sku: "SWEATSHIRT-M",
               options: {
-                Size: "M",
+                Ukuran: "M",
               },
               prices: [
                 {
@@ -586,7 +581,7 @@ export default async function initial_data_seed({
               title: "L",
               sku: "SWEATSHIRT-L",
               options: {
-                Size: "L",
+                Ukuran: "L",
               },
               prices: [
                 {
@@ -603,7 +598,7 @@ export default async function initial_data_seed({
               title: "XL",
               sku: "SWEATSHIRT-XL",
               options: {
-                Size: "XL",
+                Ukuran: "XL",
               },
               prices: [
                 {
@@ -624,12 +619,12 @@ export default async function initial_data_seed({
           ],
         },
         {
-          title: "Medusa Sweatpants",
+          title: "Celana Jogger Medusa",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Pants")!.id,
+            categoryResult.find((cat) => cat.name === "Celana")!.id,
           ],
           description:
-            "Reimagine the feeling of classic sweatpants. With our cotton sweatpants, everyday essentials no longer have to be ordinary.",
+            "Celana jogger berbahan nyaman dengan desain kasual yang stylish. Cocok dipadukan dengan berbagai outfit sehari-hari.",
           handle: "sweatpants",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -648,7 +643,7 @@ export default async function initial_data_seed({
               title: "S",
               sku: "SWEATPANTS-S",
               options: {
-                Size: "S",
+                Ukuran: "S",
               },
               prices: [
                 {
@@ -665,7 +660,7 @@ export default async function initial_data_seed({
               title: "M",
               sku: "SWEATPANTS-M",
               options: {
-                Size: "M",
+                Ukuran: "M",
               },
               prices: [
                 {
@@ -682,7 +677,7 @@ export default async function initial_data_seed({
               title: "L",
               sku: "SWEATPANTS-L",
               options: {
-                Size: "L",
+                Ukuran: "L",
               },
               prices: [
                 {
@@ -699,7 +694,7 @@ export default async function initial_data_seed({
               title: "XL",
               sku: "SWEATPANTS-XL",
               options: {
-                Size: "XL",
+                Ukuran: "XL",
               },
               prices: [
                 {
@@ -720,12 +715,12 @@ export default async function initial_data_seed({
           ],
         },
         {
-          title: "Medusa Shorts",
+          title: "Celana Pendek Medusa",
           category_ids: [
-            categoryResult.find((cat) => cat.name === "Merch")!.id,
+            categoryResult.find((cat) => cat.name === "Celana Pendek")!.id,
           ],
           description:
-            "Reimagine the feeling of classic shorts. With our cotton shorts, everyday essentials no longer have to be ordinary.",
+            "Celana pendek berbahan katun yang nyaman dan ringan. Cocok digunakan untuk aktivitas santai sehari-hari.",
           handle: "shorts",
           weight: 400,
           status: ProductStatus.PUBLISHED,
@@ -744,7 +739,7 @@ export default async function initial_data_seed({
               title: "S",
               sku: "SHORTS-S",
               options: {
-                Size: "S",
+                Ukuran: "S",
               },
               prices: [
                 {
@@ -761,7 +756,7 @@ export default async function initial_data_seed({
               title: "M",
               sku: "SHORTS-M",
               options: {
-                Size: "M",
+                Ukuran: "M",
               },
               prices: [
                 {
@@ -778,7 +773,7 @@ export default async function initial_data_seed({
               title: "L",
               sku: "SHORTS-L",
               options: {
-                Size: "L",
+                Ukuran: "L",
               },
               prices: [
                 {
@@ -795,7 +790,7 @@ export default async function initial_data_seed({
               title: "XL",
               sku: "SHORTS-XL",
               options: {
-                Size: "XL",
+                Ukuran: "XL",
               },
               prices: [
                 {

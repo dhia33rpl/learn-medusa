@@ -20,9 +20,15 @@ coverage
 **/.next/
 **/out/
 
+# Medusa (hasil build backend)
+**/.medusa
+
 # Production
 **/build
 **/dist
+
+# File upload backend (foto produk dan bukti transfer pembeli)
+apps/backend/static
 
 # Misc
 *.pem
@@ -34,10 +40,9 @@ yarn-error.log*
 
 # Local env files
 **/.env
-**/.env.local
-**/.env.development.local
-**/.env.test.local
-**/.env.production.local
+**/.env.*
+!**/.env.template
+!**/.env.example
 
 # Turbo
 .turbo

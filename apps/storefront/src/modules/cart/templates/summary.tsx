@@ -25,8 +25,8 @@ const Summary = ({ cart }: SummaryProps) => {
   return (
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-2">
-        <p className="text-[10px] tracking-[4px] text-[#a18d72]">ORDER</p>
-        <h2 className="font-serif text-2xl font-light">Summary</h2>
+        <p className="text-[10px] tracking-[4px] text-[#a18d72]">PESAN</p>
+        <h2 className="font-serif text-2xl font-light">Ringkasan Pesanan</h2>
       </div>
 
       <DiscountCode cart={cart} />
@@ -40,7 +40,7 @@ const Summary = ({ cart }: SummaryProps) => {
         data-testid="checkout-button"
         className="block w-full border border-[#292821] bg-[#292821] px-6 py-4 text-center text-[10px] uppercase tracking-[3px] text-white transition hover:bg-transparent hover:text-[#292821]"
       >
-        Go to checkout
+        Lanjut ke Checkout
       </LocalizedClientLink>
     </div>
   )

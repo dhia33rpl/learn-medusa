@@ -1,5 +1,5 @@
 import { Radio as RadioGroupOption } from "@headlessui/react"
-import { Text, clx } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import React, { useContext } from "react"
 
 import Radio from "@modules/common/components/radio"
@@ -8,7 +8,6 @@ import { getPaymentInfo, isManual } from "@lib/constants"
 import { getPaymentErrorMessage } from "@lib/util/payment-error"
 import SkeletonCardDetails from "@modules/skeletons/components/skeleton-card-details"
 import { PaymentElement } from "@stripe/react-stripe-js"
-import PaymentTest from "../payment-test"
 import { StripeContext } from "../payment-wrapper/stripe-wrapper"
 
 type PaymentContainerProps = {
@@ -24,8 +23,13 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   disabled = false,
   children,
 }) => {
-  const isDevelopment = process.env.NODE_ENV === "development"
   const paymentInfo = getPaymentInfo(paymentProviderId)
+  const manual = isManual(paymentProviderId)
+  const selected = selectedPaymentOptionId === paymentProviderId
+
+  const title = manual
+    ? "Bank Transfer"
+    : paymentInfo?.title || paymentProviderId
 
   return (
     <RadioGroupOption
@@ -33,30 +37,31 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       value={paymentProviderId}
       disabled={disabled}
       className={clx(
-        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
+        "mb-2 flex cursor-pointer flex-col gap-y-2 border px-6 py-4 text-sm transition",
         {
-          "border-ui-border-interactive":
-            selectedPaymentOptionId === paymentProviderId,
+          "border-[#292821] bg-white": selected,
+          "border-[#d8d4cc] hover:border-[#292821]": !selected && !disabled,
+          "cursor-not-allowed opacity-50": disabled,
         }
       )}
     >
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-4">
-          <Radio checked={selectedPaymentOptionId === paymentProviderId} />
-          <Text className="text-base-regular">
-            {paymentInfo?.title || paymentProviderId}
-          </Text>
-          {isManual(paymentProviderId) && isDevelopment && (
-            <PaymentTest className="hidden small:block" />
-          )}
+          <Radio checked={selected} />
+          <span className="text-[#24231f]">{title}</span>
         </div>
-        <span className="justify-self-end text-ui-fg-base">
+        <span className="justify-self-end text-[#24231f]">
           {paymentInfo?.icon}
         </span>
       </div>
-      {isManual(paymentProviderId) && isDevelopment && (
-        <PaymentTest className="small:hidden text-[10px]" />
+
+      {manual && selected && (
+        <p className="pl-8 text-xs leading-6 text-[#77746d]">
+          Lakukan pembayaran setelah menempatkan pesanan Anda. Detail rekening
+          bank akan ditampilkan pada halaman konfirmasi.
+        </p>
       )}
+
       {children}
     </RadioGroupOption>
   )
@@ -85,9 +90,9 @@ export const StripePaymentContainer = ({
       {selectedPaymentOptionId === paymentProviderId &&
         (stripeReady ? (
           <div className="my-4 transition-all duration-150 ease-in-out">
-            <Text className="txt-medium-plus text-ui-fg-base mb-1">
-              Enter your payment details:
-            </Text>
+            <p className="mb-1 text-[10px] uppercase tracking-[3px] text-[#a18d72]">
+              Masukan detail pembayaran anda
+            </p>
             <PaymentElement
               options={{ layout: "accordion" }}
               onChange={(e) => {

@@ -1,16 +1,20 @@
-"use client"
+import { Suspense } from "react"
 
-import type { SearchClient } from "instantsearch.js"
-import { Configure, InstantSearch } from "react-instantsearch"
 
-import { PRODUCT_INDEX_NAME, searchClient } from "@lib/search-client"
-import StoreHits from "@modules/store/components/store-hits"
-import StoreRefinements from "@modules/store/components/store-refinements"
-import StoreSearchBox from "@modules/store/components/store-search-box"
+import PaginatedProducts from "./paginated-products"
+import StoreSort from "../../../app/[countryCode]/(main)/store/components/store-sort"
 
-const PRODUCT_LIMIT = 12
+type SortValue = "created_at" | "price_asc" | "price_desc"
 
-const StoreTemplate = ({ currencyCode }: { currencyCode: string }) => {
+const StoreTemplate = ({
+  countryCode,
+  page,
+  sortBy,
+}: {
+  countryCode: string
+  page: number
+  sortBy: SortValue
+}) => {
   return (
     <div className="bg-[#faf9f6] text-[#24231f]">
       <div
@@ -19,33 +23,32 @@ const StoreTemplate = ({ currencyCode }: { currencyCode: string }) => {
       >
         <div className="mb-10 text-center md:mb-14">
           <p className="mb-3 text-[10px] tracking-[4px] text-[#a18d72]">
-            CURATED FOR YOU
+            DIKURASI UNTUK ANDA
           </p>
           <h1
             className="font-serif text-3xl font-light md:text-5xl"
             data-testid="store-page-title"
           >
-            All products
+            Semua Produk
           </h1>
         </div>
 
         <div className="flex flex-col small:flex-row small:items-start">
-          <InstantSearch
-            indexName={PRODUCT_INDEX_NAME}
-            searchClient={searchClient as unknown as SearchClient}
-            routing
-            future={{ preserveSharedStateOnUnmount: true }}
-          >
-            <Configure hitsPerPage={PRODUCT_LIMIT} />
-            <StoreRefinements currencyCode={currencyCode} />
-            <div className="w-full min-w-0">
-              <StoreSearchBox />
-              <StoreHits
-                hitsPerPage={PRODUCT_LIMIT}
-                currencyCode={currencyCode}
+          <StoreSort sortBy={sortBy} />
+
+          <div className="w-full min-w-0">
+            <Suspense
+              fallback={
+                <p className="text-sm text-[#77746d]">Memuat produk...</p>
+              }
+            >
+              <PaginatedProducts
+                sortBy={sortBy}
+                page={page}
+                countryCode={countryCode}
               />
-            </div>
-          </InstantSearch>
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

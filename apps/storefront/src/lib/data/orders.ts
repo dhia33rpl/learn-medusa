@@ -10,23 +10,43 @@ export const retrieveOrder = async (id: string) => {
     ...(await getAuthHeaders()),
   }
 
-  const next = {
-    ...(await getCacheOptions("orders")),
-  }
-
   return sdk.client
     .fetch<HttpTypes.StoreOrderResponse>(`/store/orders/${id}`, {
       method: "GET",
       query: {
         fields:
-          "*payment_collections.payments,*items,*items.metadata,*items.variant,*items.product",
+          "+metadata,*payment_collections.payments,*items,*items.metadata,*items.variant,*items.product",
       },
       headers,
-      next,
-      cache: "force-cache",
+      cache: "no-store",
     })
     .then(({ order }) => order)
     .catch((err) => medusaError(err))
+}
+
+/**
+ * API Store bawaan Medusa tidak mengirim metadata order, jadi data
+ * pembayaran (transfer/cod, bank, bukti transfer) diambil lewat route
+ * khusus di backend: GET /store/orders/:id/payment-info
+ */
+export const retrievePaymentInfo = async (
+  id: string
+): Promise<Record<string, unknown>> => {
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  return sdk.client
+    .fetch<{ metadata: Record<string, unknown> }>(
+      `/store/orders/${id}/payment-info`,
+      {
+        method: "GET",
+        headers,
+        cache: "no-store",
+      }
+    )
+    .then(({ metadata }) => metadata ?? {})
+    .catch(() => ({}))
 }
 
 export const listOrders = async (
@@ -43,13 +63,14 @@ export const listOrders = async (
   }
 
   return sdk.client
-    .fetch<HttpTypes.StoreOrderListResponse>(`/store/orders`, {
+    .fetch<HttpTypes.StoreOrderListResponse>("/store/orders", {
       method: "GET",
       query: {
         limit,
         offset,
         order: "-created_at",
-        fields: "*items,+items.metadata,*items.variant,*items.product",
+        fields:
+          "+metadata,*items,+items.metadata,*items.variant,*items.product",
         ...filters,
       },
       headers,
@@ -75,7 +96,11 @@ export const createTransferRequest = async (
   const id = formData.get("order_id") as string
 
   if (!id) {
-    return { success: false, error: "Order ID is required", order: null }
+    return {
+      success: false,
+      error: "ID pesanan wajib diisi",
+      order: null,
+    }
   }
 
   const headers = await getAuthHeaders()
@@ -89,8 +114,16 @@ export const createTransferRequest = async (
       },
       headers
     )
-    .then(({ order }) => ({ success: true, error: null, order }))
-    .catch((err) => ({ success: false, error: err.message, order: null }))
+    .then(({ order }) => ({
+      success: true,
+      error: null,
+      order,
+    }))
+    .catch((err) => ({
+      success: false,
+      error: err.message,
+      order: null,
+    }))
 }
 
 export const acceptTransferRequest = async (id: string, token: string) => {
@@ -98,8 +131,16 @@ export const acceptTransferRequest = async (id: string, token: string) => {
 
   return await sdk.store.order
     .acceptTransfer(id, { token }, {}, headers)
-    .then(({ order }) => ({ success: true, error: null, order }))
-    .catch((err) => ({ success: false, error: err.message, order: null }))
+    .then(({ order }) => ({
+      success: true,
+      error: null,
+      order,
+    }))
+    .catch((err) => ({
+      success: false,
+      error: err.message,
+      order: null,
+    }))
 }
 
 export const declineTransferRequest = async (id: string, token: string) => {
@@ -107,6 +148,14 @@ export const declineTransferRequest = async (id: string, token: string) => {
 
   return await sdk.store.order
     .declineTransfer(id, { token }, {}, headers)
-    .then(({ order }) => ({ success: true, error: null, order }))
-    .catch((err) => ({ success: false, error: err.message, order: null }))
+    .then(({ order }) => ({
+      success: true,
+      error: null,
+      order,
+    }))
+    .catch((err) => ({
+      success: false,
+      error: err.message,
+      order: null,
+    }))
 }

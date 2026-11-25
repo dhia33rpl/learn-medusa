@@ -23,7 +23,7 @@ export default async function Checkout() {
     <div className="mx-auto max-w-[1400px] px-5 py-10 md:px-10 md:py-14">
       <div className="mb-10 text-center md:mb-12">
         <p className="mb-3 text-[10px] tracking-[4px] text-[#a18d72]">
-          SECURE CHECKOUT
+          PEMBAYARAN & PENGIRIMAN
         </p>
         <h1 className="font-serif text-3xl font-light md:text-5xl">Checkout</h1>
       </div>

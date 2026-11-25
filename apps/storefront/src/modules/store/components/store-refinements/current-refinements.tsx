@@ -16,9 +16,7 @@ type Refinement = ReturnType<
 >["items"][number]["refinements"][number]
 
 /**
- * What a single refinement reads as on its chip. The raw label is the facet
- * value, which is the option's `Size:M` form for options and a bare `true` for
- * the on-sale toggle — neither says what it filters on out of context.
+ * Mengubah setiap filter aktif menjadi label berbahasa Indonesia.
  */
 function refinementLabel(refinement: Refinement, currencyCode: string) {
   const { attribute, label, value, operator } = refinement
@@ -34,7 +32,7 @@ function refinementLabel(refinement: Refinement, currencyCode: string) {
   }
 
   if (attribute === priceAttribute("on_sale", currencyCode)) {
-    return "On sale"
+    return "Sedang diskon"
   }
 
   if (attribute === priceAttribute("min_price", currencyCode)) {
@@ -45,12 +43,12 @@ function refinementLabel(refinement: Refinement, currencyCode: string) {
     })
 
     return operator === "<=" || operator === "<"
-      ? `Up to ${amount}`
-      : `From ${amount}`
+      ? `Hingga ${amount}`
+      : `Mulai dari ${amount}`
   }
 
   if (attribute === CATEGORY_ATTRIBUTE) {
-    return `Category: ${label}`
+    return `Kategori: ${label}`
   }
 
   if (attribute === LABELS_ATTRIBUTE) {
@@ -61,9 +59,7 @@ function refinementLabel(refinement: Refinement, currencyCode: string) {
 }
 
 /**
- * Every active refinement as a chip that drops it, above the filters that set
- * them. The free-text query is excluded by the connector's own defaults, so
- * only what the sidebar controls shows up here.
+ * Menampilkan semua filter aktif dalam bentuk chip.
  */
 const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
   const { items, refine } = useCurrentRefinements()
@@ -79,15 +75,16 @@ const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
     <div className="flex flex-col gap-y-3" data-testid="current-refinements">
       <div className="flex items-center justify-between gap-x-2 pr-6">
         <span className="txt-compact-small-plus text-ui-fg-subtle">
-          Applied filters
+          Filter yang diterapkan
         </span>
+
         {canClearAll && (
           <button
             onClick={clearAll}
             className="txt-compact-small-plus text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
             data-testid="clear-refinements"
           >
-            Clear all
+            Hapus semua
           </button>
         )}
       </div>
@@ -104,7 +101,7 @@ const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
             >
               <button
                 onClick={() => refine(refinement)}
-                aria-label={`Remove filter ${label}`}
+                aria-label={`Hapus filter ${label}`}
                 className="border-ui-border-interactive text-ui-fg-base border text-small-regular h-8 rounded-rounded px-3 flex items-center gap-x-1.5 transition-colors duration-150 hover:bg-ui-bg-base-hover"
                 data-testid="remove-refinement"
               >

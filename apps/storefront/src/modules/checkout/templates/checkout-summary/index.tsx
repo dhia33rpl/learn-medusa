@@ -9,7 +9,6 @@ const CheckoutSummary = ({ cart }: { cart: HttpTypes.StoreCart }) => {
       <div className="flex w-full flex-col border border-[#e9e6df] bg-white p-6">
         <div className="mb-5 flex flex-col gap-y-2">
           <p className="text-[10px] tracking-[4px] text-[#a18d72]">ORDER</p>
-          <h2 className="font-serif text-2xl font-light">In your bag</h2>
         </div>
 
         <div className="border-t border-[#e9e6df] pt-5">

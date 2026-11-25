@@ -1,4 +1,5 @@
 "use client"
+
 import { Radio, RadioGroup } from "@headlessui/react"
 import { setShippingMethod } from "@lib/data/cart"
 import { calculatePriceForShippingOption } from "@lib/data/fulfillment"
@@ -54,6 +55,10 @@ const optionClass = (selected: boolean, disabled?: boolean) =>
       "cursor-not-allowed border-[#e9e6df] opacity-50": disabled,
     }
   )
+const shippingNames: Record<string, string> = {
+  ID_SHIPPING_1: "JNE Reguler",
+  ID_SHIPPING_2: "J&T Express",
+}
 
 const Shipping: React.FC<ShippingProps> = ({
   cart,
@@ -64,10 +69,13 @@ const Shipping: React.FC<ShippingProps> = ({
 
   const [showPickupOptions, setShowPickupOptions] =
     useState<string>(PICKUP_OPTION_OFF)
+
   const [calculatedPricesMap, setCalculatedPricesMap] = useState<
     Record<string, number>
   >({})
+
   const [error, setError] = useState<string | null>(null)
+
   const [shippingMethodId, setShippingMethodId] = useState<string | null>(
     cart.shipping_methods?.at(-1)?.shipping_option_id || null
   )
@@ -79,11 +87,31 @@ const Shipping: React.FC<ShippingProps> = ({
   const isOpen = searchParams.get("step") === "delivery"
 
   const _shippingMethods = availableShippingMethods?.filter(
-    (sm) => (sm as unknown as { service_zone?: { fulfillment_set?: { type?: string; location?: { address: HttpTypes.StoreCartAddress } } } }).service_zone?.fulfillment_set?.type !== "pickup"
+    (sm) =>
+      (
+        sm as unknown as {
+          service_zone?: {
+            fulfillment_set?: {
+              type?: string
+              location?: { address: HttpTypes.StoreCartAddress }
+            }
+          }
+        }
+      ).service_zone?.fulfillment_set?.type !== "pickup"
   )
 
   const _pickupMethods = availableShippingMethods?.filter(
-    (sm) => (sm as unknown as { service_zone?: { fulfillment_set?: { type?: string; location?: { address: HttpTypes.StoreCartAddress } } } }).service_zone?.fulfillment_set?.type === "pickup"
+    (sm) =>
+      (
+        sm as unknown as {
+          service_zone?: {
+            fulfillment_set?: {
+              type?: string
+              location?: { address: HttpTypes.StoreCartAddress }
+            }
+          }
+        }
+      ).service_zone?.fulfillment_set?.type === "pickup"
   )
 
   const hasPickupOptions = !!_pickupMethods?.length
@@ -99,6 +127,7 @@ const Shipping: React.FC<ShippingProps> = ({
       if (promises.length) {
         Promise.allSettled(promises).then((res) => {
           const pricesMap: Record<string, number> = {}
+
           res
             .filter((r) => r.status === "fulfilled")
             .forEach((p) => {
@@ -139,7 +168,9 @@ const Shipping: React.FC<ShippingProps> = ({
     }
 
     let currentId: string | null = null
+
     setIsLoading(true)
+
     setShippingMethodId((prev) => {
       currentId = prev
       return id
@@ -148,7 +179,6 @@ const Shipping: React.FC<ShippingProps> = ({
     await setShippingMethod({ cartId: cart.id, shippingMethodId: id })
       .catch((err) => {
         setShippingMethodId(currentId)
-
         setError(err.message)
       })
       .finally(() => {
@@ -172,11 +202,12 @@ const Shipping: React.FC<ShippingProps> = ({
             }
           )}
         >
-          Delivery
+          Pengiriman
           {!isOpen && (cart.shipping_methods?.length ?? 0) > 0 && (
             <CheckCircleSolid className="text-[#a18d72]" />
           )}
         </h2>
+
         {!isOpen &&
           cart?.shipping_address &&
           cart?.billing_address &&
@@ -186,21 +217,24 @@ const Shipping: React.FC<ShippingProps> = ({
               className="text-[10px] uppercase tracking-[3px] text-[#a18d72] underline underline-offset-4 transition hover:text-[#24231f]"
               data-testid="edit-delivery-button"
             >
-              Edit
+              Ubah
             </button>
           )}
       </div>
+
       {isOpen ? (
         <>
           <div className="grid">
             <div className="mb-4 flex flex-col gap-y-1">
               <span className="text-[10px] uppercase tracking-[3px] text-[#a18d72]">
-                Shipping method
+                Metode Pengiriman
               </span>
+
               <span className="text-sm text-[#77746d]">
-                How would you like your order delivered?
+                Bagaimana pesanan ingin dikirim?
               </span>
             </div>
+
             <div data-testid="delivery-options-container">
               <div className="pb-8 pt-2 md:pt-0">
                 {hasPickupOptions && (
@@ -227,12 +261,14 @@ const Shipping: React.FC<ShippingProps> = ({
                         <MedusaRadio
                           checked={showPickupOptions === PICKUP_OPTION_ON}
                         />
-                        <span>Pick up your order</span>
+                        <span>Ambil Pesanan</span>
                       </div>
+
                       <span className="justify-self-end text-[#24231f]">-</span>
                     </Radio>
                   </RadioGroup>
                 )}
+
                 <RadioGroup
                   value={shippingMethodId}
                   onChange={(v) => {
@@ -262,8 +298,10 @@ const Shipping: React.FC<ShippingProps> = ({
                           <MedusaRadio
                             checked={option.id === shippingMethodId}
                           />
-                          <span>{option.name}</span>
+
+                          <span>{shippingNames[option.id] || option.name}</span>
                         </div>
+
                         <span className="justify-self-end text-[#24231f]">
                           {option.price_type === "flat" ? (
                             convertToLocale({
@@ -293,12 +331,14 @@ const Shipping: React.FC<ShippingProps> = ({
             <div className="grid">
               <div className="mb-4 flex flex-col gap-y-1">
                 <span className="text-[10px] uppercase tracking-[3px] text-[#a18d72]">
-                  Store
+                  Toko
                 </span>
+
                 <span className="text-sm text-[#77746d]">
-                  Choose a store near you
+                  Pilih toko terdekat untuk mengambil pesanan
                 </span>
               </div>
+
               <div data-testid="delivery-options-container">
                 <div className="pb-8 pt-2 md:pt-0">
                   <RadioGroup
@@ -325,16 +365,29 @@ const Shipping: React.FC<ShippingProps> = ({
                             <MedusaRadio
                               checked={option.id === shippingMethodId}
                             />
+
                             <div className="flex flex-col">
                               <span>{option.name}</span>
+
                               <span className="text-[#77746d]">
                                 {formatAddress(
-                                  (option as unknown as { service_zone?: { fulfillment_set?: { location?: { address: HttpTypes.StoreCartAddress } } } }).service_zone?.fulfillment_set?.location
+                                  (
+                                    option as unknown as {
+                                      service_zone?: {
+                                        fulfillment_set?: {
+                                          location?: {
+                                            address: HttpTypes.StoreCartAddress
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ).service_zone?.fulfillment_set?.location
                                     ?.address as HttpTypes.StoreCartAddress
                                 )}
                               </span>
                             </div>
                           </div>
+
                           <span className="justify-self-end text-[#24231f]">
                             {convertToLocale({
                               amount: option.amount!,
@@ -355,6 +408,7 @@ const Shipping: React.FC<ShippingProps> = ({
               error={error}
               data-testid="delivery-option-error-message"
             />
+
             <button
               type="button"
               onClick={handleSubmit}
@@ -362,7 +416,7 @@ const Shipping: React.FC<ShippingProps> = ({
               className="w-full border border-[#292821] bg-[#292821] px-6 py-4 text-[10px] uppercase tracking-[3px] text-white transition hover:bg-transparent hover:text-[#292821] disabled:cursor-not-allowed disabled:opacity-50 small:w-auto"
               data-testid="submit-delivery-option-button"
             >
-              {isLoading ? "Saving..." : "Continue to payment"}
+              {isLoading ? "Menyimpan..." : "Lanjut ke Pembayaran"}
             </button>
           </div>
         </>
@@ -371,8 +425,9 @@ const Shipping: React.FC<ShippingProps> = ({
           {cart && (cart.shipping_methods?.length ?? 0) > 0 && (
             <div className="flex w-full flex-col gap-y-1 small:w-1/3">
               <p className="mb-1 text-[10px] uppercase tracking-[3px] text-[#a18d72]">
-                Method
+                Metode
               </p>
+
               <p className="text-sm leading-6 text-[#77746d]">
                 {cart.shipping_methods!.at(-1)!.name}{" "}
                 {convertToLocale({

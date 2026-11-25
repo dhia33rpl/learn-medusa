@@ -11,6 +11,7 @@ import LineItemPrice from "@modules/common/components/line-item-price"
 import LineItemUnitPrice from "@modules/common/components/line-item-unit-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Spinner from "@modules/common/icons/spinner"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 type ItemProps = {
@@ -20,6 +21,7 @@ type ItemProps = {
 }
 
 const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
+  const router = useRouter()
   const [updating, setUpdating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -31,6 +33,9 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
       lineId: item.id,
       quantity,
     })
+      .then(() => {
+        router.refresh() // muat ulang data keranjang di halaman
+      })
       .catch((err) => {
         setError(err.message)
       })
@@ -59,7 +64,7 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
             {image ? (
               <img
                 src={image}
-                alt={item.product_title ?? "Product"}
+                alt={item.product_title ?? "Produk"}
                 className="h-full w-full object-cover"
               />
             ) : (

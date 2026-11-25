@@ -6,7 +6,6 @@ import { listRegions } from "@lib/data/regions"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
-import Search from "@modules/layout/components/search"
 import SideMenu from "@modules/layout/components/side-menu"
 
 export default async function Nav() {
@@ -32,22 +31,22 @@ export default async function Nav() {
 
             <div className="hidden items-center gap-7 text-[11px] tracking-[2px] md:flex">
               <LocalizedClientLink
-                href="/categories/women"
+                href="/categories/wanita"
                 className="transition hover:text-[#a18d72]"
               >
-                WOMEN
+                WANITA
               </LocalizedClientLink>
               <LocalizedClientLink
-                href="/categories/men"
+                href="/categories/pria"
                 className="transition hover:text-[#a18d72]"
               >
-                MEN
+                PRIA
               </LocalizedClientLink>
               <LocalizedClientLink
                 href="/store"
                 className="transition hover:text-[#a18d72]"
               >
-                COLLECTION
+                KOLEKSI
               </LocalizedClientLink>
             </div>
           </div>
@@ -63,15 +62,14 @@ export default async function Nav() {
             </LocalizedClientLink>
           </div>
 
-          {/* Kanan: search, account, cart */}
+          {/* Kanan: account, cart */}
           <div className="flex flex-1 basis-0 items-center justify-end gap-x-6 text-xs tracking-widest">
-            <Search />
             <LocalizedClientLink
               className="hidden transition hover:text-[#a18d72] small:block"
               href="/account"
               data-testid="nav-account-link"
             >
-              ACCOUNT
+              AKUN
             </LocalizedClientLink>
             <Suspense
               fallback={
@@ -80,7 +78,7 @@ export default async function Nav() {
                   href="/cart"
                   data-testid="nav-cart-link"
                 >
-                  BAG (0)
+                  KERANJANG (0)
                 </LocalizedClientLink>
               }
             >

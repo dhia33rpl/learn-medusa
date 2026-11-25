@@ -16,8 +16,8 @@ export default function ContactPage() {
     <PolicyPage title="Contact">
       <PlaceholderNotice />
       <p>
-        Questions about an order, shipping or returns? Contact {STORE_NAME}{" "}
-        customer service and include your order number.
+        Ada pertanyaan seputar pesanan, pengiriman, atau pengembalian barang?
+        Hubungi {STORE_NAME} layanan pelanggan dan sertakan nomor pesanan Anda.
       </p>
     </PolicyPage>
   )

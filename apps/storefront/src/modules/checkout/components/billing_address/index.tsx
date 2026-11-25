@@ -17,9 +17,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
   })
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLInputElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setFormData({
       ...formData,
@@ -39,15 +37,16 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           required
           data-testid="billing-first-name-input"
         />
+
         <Input
-          label="Last name"
+          label="Last name (Opsional)"
           name="billing_address.last_name"
           autoComplete="family-name"
           value={formData["billing_address.last_name"]}
           onChange={handleChange}
-          required
           data-testid="billing-last-name-input"
         />
+
         <Input
           label="Address"
           name="billing_address.address_1"
@@ -57,6 +56,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           required
           data-testid="billing-address-input"
         />
+
         <Input
           label="Company"
           name="billing_address.company"
@@ -65,6 +65,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           autoComplete="organization"
           data-testid="billing-company-input"
         />
+
         <Input
           label="Postal code"
           name="billing_address.postal_code"
@@ -74,6 +75,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           required
           data-testid="billing-postal-input"
         />
+
         <Input
           label="City"
           name="billing_address.city"
@@ -81,6 +83,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           value={formData["billing_address.city"]}
           onChange={handleChange}
         />
+
         <CountrySelect
           name="billing_address.country_code"
           autoComplete="country"
@@ -90,6 +93,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           required
           data-testid="billing-country-select"
         />
+
         <Input
           label="State / Province"
           name="billing_address.province"
@@ -98,6 +102,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
           onChange={handleChange}
           data-testid="billing-province-input"
         />
+
         <Input
           label="Phone"
           name="billing_address.phone"

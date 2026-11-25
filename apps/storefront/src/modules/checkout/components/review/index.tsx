@@ -34,7 +34,7 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
             }
           )}
         >
-          Review
+          Tinjau Pesanan
         </h2>
       </div>
       {isOpen && previousStepsCompleted && (
@@ -42,10 +42,9 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
           <div className="mb-6 flex w-full items-start gap-x-1">
             <div className="w-full">
               <p className="text-sm leading-7 text-[#77746d]">
-                By clicking the Place Order button, you confirm that you have
-                read, understand and accept our Terms of Use, Terms of Sale and
-                Returns Policy and acknowledge that you have read VELORA&apos;s
-                Privacy Policy.
+                Dengan mengklik tombol Tempatkan Pesanan, Anda mengonfirmasi bahwa Anda telah
+                membaca, memahami, dan menerima Persyaratan Penggunaan, Persyaratan Penjualan, dan
+                Kebijakan Pengembalian serta mengakui bahwa Anda telah membaca Kebijakan Privasi VELORA.
               </p>
             </div>
           </div>

@@ -63,7 +63,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
     if (activeTimer) {
       clearTimeout(activeTimer)
     }
-    refreshCart() // segarkan juga saat kursor diarahkan ke Bag
+    refreshCart() // segarkan juga saat kursor diarahkan ke Tas
     setCartDropdownOpen(true)
   }
 
@@ -93,7 +93,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
   const formatAmount = (amount: number) =>
     convertToLocale({
       amount,
-      currency_code: cart?.currency_code ?? "eur",
+      currency_code: cart?.currency_code ?? "idr",
     })
 
   return (
@@ -108,7 +108,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
           className="flex h-full items-center text-[11px] uppercase tracking-[2px] transition-all duration-200 ease-out hover:text-[#a18d72] focus:outline-none"
           data-testid="nav-cart-link"
         >
-          Bag ({totalItems})
+          Tas ({totalItems})
         </LocalizedClientLink>
 
         <Transition
@@ -128,9 +128,11 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
           >
             <div className="flex items-center justify-between border-b border-white/15 pb-4">
               <h3 className="text-xs font-medium uppercase tracking-[3px] text-white/80">
-                Shopping Bag
+                Tas Belanja
               </h3>
-              <span className="text-xs text-white/50">{totalItems} Items</span>
+              <span className="text-xs text-white/50">
+                {totalItems} Barang
+              </span>
             </div>
 
             {cart && cart.items?.length ? (
@@ -158,7 +160,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
                           {image ? (
                             <img
                               src={image}
-                              alt={item.title ?? "Product"}
+                              alt={item.title ?? "Produk"}
                               className="h-full w-full object-cover"
                             />
                           ) : (
@@ -195,7 +197,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
                               className="text-xs text-white/70"
                               data-testid="cart-item-quantity"
                             >
-                              Qty: {item.quantity}
+                              Jml: {item.quantity}
                             </span>
                             <span
                               className="text-xs font-semibold tracking-wide text-white"
@@ -215,7 +217,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
                             data-testid="cart-item-remove-button"
                           >
                             <span className="cursor-pointer text-xs text-white/40 transition hover:text-red-400">
-                              Remove
+                              Hapus
                             </span>
                           </DeleteButton>
                         </div>
@@ -226,13 +228,13 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <p className="mb-4 text-sm tracking-wide text-white/50">
-                  Your shopping bag is empty.
+                  Tas belanjamu masih kosong.
                 </p>
                 <LocalizedClientLink
                   href="/store"
                   className="border border-white/30 px-6 py-2.5 text-[11px] uppercase tracking-[2px] transition hover:border-white hover:bg-white hover:text-black"
                 >
-                  Explore Collection
+                  Jelajahi Koleksi
                 </LocalizedClientLink>
               </div>
             )}
@@ -255,7 +257,7 @@ const CartDropdown = ({ cart: initialCart }: CartDropdownProps) => {
                   className="w-full bg-white py-3 text-center text-[11px] font-medium uppercase tracking-[2px] text-black transition hover:bg-[#a18d72] hover:text-white"
                   data-testid="go-to-cart-button"
                 >
-                  Go to bag
+                  Lihat Tas
                 </LocalizedClientLink>
               </div>
             ) : null}

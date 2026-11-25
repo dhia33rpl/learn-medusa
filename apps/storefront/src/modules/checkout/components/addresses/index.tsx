@@ -1,4 +1,5 @@
 "use client"
+
 import { setAddresses } from "@lib/data/cart"
 import useToggleState from "@lib/hooks/use-toggle-state"
 import compareAddresses from "@lib/util/compare-addresses"
@@ -22,7 +23,7 @@ const ContinueButton = () => {
       className="mt-6 w-full border border-[#292821] bg-[#292821] px-6 py-4 text-[10px] uppercase tracking-[3px] text-white transition hover:bg-transparent hover:text-[#292821] disabled:cursor-not-allowed disabled:opacity-50 small:w-auto"
       data-testid="submit-address-button"
     >
-      {pending ? "Saving..." : "Continue to delivery"}
+      {pending ? "Menyimpan..." : "Lanjut ke Pengiriman"}
     </button>
   )
 }
@@ -78,7 +79,7 @@ const Addresses = ({
     <div className="border-b border-[#e9e6df] pb-8">
       <div className="mb-6 flex flex-row items-center justify-between">
         <h2 className="flex flex-row items-center gap-x-2 font-serif text-2xl font-light md:text-3xl">
-          Shipping Address
+          Alamat Pengiriman
           {!isOpen && <CheckCircleSolid className="text-[#a18d72]" />}
         </h2>
         {!isOpen && cart?.shipping_address && (
@@ -87,7 +88,7 @@ const Addresses = ({
             className="text-[10px] uppercase tracking-[3px] text-[#a18d72] underline underline-offset-4 transition hover:text-[#24231f]"
             data-testid="edit-address-button"
           >
-            Edit
+            Ubah
           </button>
         )}
       </div>
@@ -105,7 +106,7 @@ const Addresses = ({
             {!sameAsBilling && (
               <div>
                 <h2 className="pb-6 pt-8 font-serif text-2xl font-light md:text-3xl">
-                  Billing address
+                  Alamat Penagihan
                 </h2>
 
                 <BillingAddress cart={cart} />
@@ -120,7 +121,7 @@ const Addresses = ({
           {cart && cart.shipping_address ? (
             <div className="flex flex-col gap-y-6 small:flex-row small:items-start small:gap-x-6">
               <SummaryBlock
-                title="Shipping Address"
+                title="Alamat Pengiriman"
                 testId="shipping-address-summary"
               >
                 <span>
@@ -138,17 +139,17 @@ const Addresses = ({
                 <span>{cart.shipping_address.country_code?.toUpperCase()}</span>
               </SummaryBlock>
 
-              <SummaryBlock title="Contact" testId="shipping-contact-summary">
+              <SummaryBlock title="Kontak" testId="shipping-contact-summary">
                 <span>{cart.shipping_address.phone}</span>
                 <span>{cart.email}</span>
               </SummaryBlock>
 
               <SummaryBlock
-                title="Billing Address"
+                title="Alamat Penagihan"
                 testId="billing-address-summary"
               >
                 {sameAsBilling ? (
-                  <span>Billing and delivery address are the same.</span>
+                  <span>Alamat penagihan dan pengiriman sama.</span>
                 ) : (
                   <>
                     <span>

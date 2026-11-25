@@ -3,6 +3,7 @@
 import { Plus } from "@medusajs/icons"
 import { Button, Heading } from "@modules/common/components/ui"
 import { useActionState, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 import { addCustomerAddress } from "@lib/data/customer"
 import useToggleState from "@lib/hooks/use-toggle-state"
@@ -18,6 +19,8 @@ const AddAddress = ({
   region: HttpTypes.StoreRegion
   addresses: HttpTypes.StoreCustomerAddress[]
 }) => {
+  const router = useRouter()
+
   const [successState, setSuccessState] = useState(false)
   const { state, open, close: closeModal } = useToggleState(false)
 
@@ -41,12 +44,14 @@ const AddAddress = ({
   useEffect(() => {
     if (formState.success) {
       setSuccessState(true)
+      router.refresh()
     }
-  }, [formState])
+  }, [formState, router])
 
   return (
     <>
       <button
+        type="button"
         className="border border-ui-border-base rounded-rounded p-5 min-h-[220px] h-full w-full flex flex-col justify-between"
         onClick={open}
         data-testid="add-address-button"
@@ -59,6 +64,7 @@ const AddAddress = ({
         <Modal.Title>
           <Heading className="mb-2">Add address</Heading>
         </Modal.Title>
+
         <form action={formAction}>
           <Modal.Body>
             <div className="flex flex-col gap-y-2">
@@ -70,20 +76,22 @@ const AddAddress = ({
                   autoComplete="given-name"
                   data-testid="first-name-input"
                 />
+
                 <Input
-                  label="Last name"
+                  label="Last name (Opsional)"
                   name="last_name"
-                  required
                   autoComplete="family-name"
                   data-testid="last-name-input"
                 />
               </div>
+
               <Input
                 label="Company"
                 name="company"
                 autoComplete="organization"
                 data-testid="company-input"
               />
+
               <Input
                 label="Address"
                 name="address_1"
@@ -91,12 +99,14 @@ const AddAddress = ({
                 autoComplete="address-line1"
                 data-testid="address-1-input"
               />
+
               <Input
                 label="Apartment, suite, etc."
                 name="address_2"
                 autoComplete="address-line2"
                 data-testid="address-2-input"
               />
+
               <div className="grid grid-cols-[144px_1fr] gap-x-2">
                 <Input
                   label="Postal code"
@@ -105,6 +115,7 @@ const AddAddress = ({
                   autoComplete="postal-code"
                   data-testid="postal-code-input"
                 />
+
                 <Input
                   label="City"
                   name="city"
@@ -113,12 +124,14 @@ const AddAddress = ({
                   data-testid="city-input"
                 />
               </div>
+
               <Input
                 label="Province / State"
                 name="province"
                 autoComplete="address-level1"
                 data-testid="state-input"
               />
+
               <CountrySelect
                 region={region}
                 name="country_code"
@@ -126,6 +139,7 @@ const AddAddress = ({
                 autoComplete="country"
                 data-testid="country-select"
               />
+
               <Input
                 label="Phone"
                 name="phone"
@@ -133,6 +147,7 @@ const AddAddress = ({
                 data-testid="phone-input"
               />
             </div>
+
             {formState.error && (
               <div
                 className="text-rose-500 text-small-regular py-2"
@@ -142,6 +157,7 @@ const AddAddress = ({
               </div>
             )}
           </Modal.Body>
+
           <Modal.Footer>
             <div className="flex gap-3 mt-6">
               <Button
@@ -153,6 +169,7 @@ const AddAddress = ({
               >
                 Cancel
               </Button>
+
               <SubmitButton data-testid="save-button">Save</SubmitButton>
             </div>
           </Modal.Footer>

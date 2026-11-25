@@ -16,11 +16,6 @@ export default async function Home(props: {
 
   return (
     <main className="min-h-screen bg-[#faf9f6] text-[#24231f]">
-      {/* Announcement */}
-      <div className="bg-[#292821] px-4 py-2.5 text-center text-[10px] tracking-[2px] text-white sm:text-xs">
-        FREE SHIPPING FOR ORDERS OVER €50
-      </div>
-
       {/* Hero */}
       <section
         id="home"
@@ -35,27 +30,25 @@ export default async function Home(props: {
         >
           <div className="relative z-10 max-w-xl px-7 py-16 text-white md:px-20">
             <p className="mb-6 text-[10px] tracking-[5px] md:text-xs">
-              THE NEW SEASON COLLECTION
+              KOLEKSI MUSIM BARU
             </p>
 
             <h1 className="text-5xl font-light leading-[1.15] tracking-wide md:text-7xl">
-              Less is
+              Sederhana,
               <br />
-              more.
-              <br />
-              <span className="font-serif italic">Always.</span>
+              <span className="font-serif italic">tetap istimewa.</span>
             </h1>
 
             <p className="mt-7 max-w-sm text-sm leading-7 text-white/85">
-              Discover timeless essentials designed to make every day feel
-              effortlessly stylish.
+              Temukan esensial timelessness yang dirancang untuk membuat setiap
+              hari terasa stylish tanpa susah.
             </p>
 
             <a
               href="#collection"
               className="mt-9 inline-block border border-white px-9 py-4 text-[10px] tracking-[3px] transition hover:bg-white hover:text-black"
             >
-              EXPLORE COLLECTION
+              Jelajahi Koleksi
             </a>
           </div>
         </div>
@@ -64,25 +57,26 @@ export default async function Home(props: {
       {/* Intro */}
       <section className="mx-auto max-w-5xl px-6 py-20 text-center md:py-28">
         <p className="mb-5 text-[10px] tracking-[4px] text-[#a18d72]">
-          WELCOME TO VELORA
+          SELAMAT DATANG DI VELORA
         </p>
 
         <h2 className="font-serif text-3xl font-light leading-relaxed md:text-5xl">
-          Everyday style,
+          Gaya sehari-hari,
           <br />
-          <span className="italic">effortlessly yours.</span>
+          <span className="italic">tanpa repot.</span>
         </h2>
 
         <p className="mx-auto mt-6 max-w-lg text-sm leading-7 text-[#77746d]">
-          We believe fashion should be simple, comfortable, and timeless. Find
-          pieces that reflect your own style.
+          Kami percaya bahwa busana sebaiknya sederhana, nyaman, dan tak lekang
+          oleh waktu. Temukan berbagai busana yang mencerminkan gaya pribadi
+          Anda.
         </p>
       </section>
 
       {/* Categories */}
       <section className="mx-auto grid max-w-[1400px] grid-cols-1 gap-4 px-5 md:grid-cols-2 md:px-10">
         <a
-          href={`/${countryCode}/categories/women`}
+          href={`/${countryCode}/categories/wanita`}
           className="group relative h-[430px] overflow-hidden bg-[#e8e0d5] md:h-[580px]"
         >
           <img
@@ -92,16 +86,16 @@ export default async function Home(props: {
           />
           <div className="absolute inset-0 bg-black/15" />
           <div className="absolute bottom-10 left-9 text-white">
-            <p className="text-[10px] tracking-[4px]">DISCOVER YOUR STYLE</p>
-            <h3 className="mt-3 font-serif text-4xl">Women</h3>
+            <p className="text-[10px] tracking-[4px]">TEMUKAN GAYAMU</p>
+            <h3 className="mt-3 font-serif text-4xl">Wanita</h3>
             <p className="mt-5 text-xs tracking-[3px] underline underline-offset-8">
-              SHOP WOMEN
+              KOLEKSI WANITA
             </p>
           </div>
         </a>
 
         <a
-          href={`/${countryCode}/categories/men`}
+          href={`/${countryCode}/categories/pria`}
           className="group relative h-[430px] overflow-hidden bg-[#d8d4cc] md:h-[580px]"
         >
           <img
@@ -111,10 +105,10 @@ export default async function Home(props: {
           />
           <div className="absolute inset-0 bg-black/15" />
           <div className="absolute bottom-10 left-9 text-white">
-            <p className="text-[10px] tracking-[4px]">EFFORTLESS EVERYDAY</p>
-            <h3 className="mt-3 font-serif text-4xl">Men</h3>
+            <p className="text-[10px] tracking-[4px]">TEMUKAN GAYAMU</p>
+            <h3 className="mt-3 font-serif text-4xl">Pria</h3>
             <p className="mt-5 text-xs tracking-[3px] underline underline-offset-8">
-              SHOP MEN
+              KOLEKSI PRIA
             </p>
           </div>
         </a>
@@ -128,16 +122,15 @@ export default async function Home(props: {
         <div className="mb-10 flex items-end justify-between">
           <div>
             <p className="mb-3 text-[10px] tracking-[4px] text-[#a18d72]">
-              CURATED FOR YOU
+              DIKURASI UNTUKMU
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl">New Arrivals</h2>
           </div>
 
           <a
             href={`/${countryCode}/store`}
             className="hidden text-[10px] tracking-[2px] underline underline-offset-8 sm:block"
           >
-            VIEW ALL
+            LIHAT SEMUA
           </a>
         </div>
 
@@ -200,18 +193,18 @@ export default async function Home(props: {
       {/* Brand Story */}
       <section className="bg-[#eae5dc] px-6 py-20 text-center md:py-28">
         <p className="text-[10px] tracking-[4px] text-[#8d7d68]">
-          OUR PHILOSOPHY
+          FILOSOFI KAMI
         </p>
 
         <h2 className="mx-auto mt-6 max-w-3xl font-serif text-3xl font-light leading-relaxed md:text-5xl">
-          Fashion fades.
+          Tren datang dan pergi,
           <br />
-          <span className="italic">Style remains.</span>
+          <span className="italic">Your style, your story.</span>
         </h2>
 
         <p className="mx-auto mt-6 max-w-md text-sm leading-7 text-[#77746d]">
-          VELORA is created for those who appreciate simplicity, quality, and
-          the beauty of everyday moments.
+          Untuk kamu yang percaya kalau tampil keren nggak harus berlebihan.
+          Simpel, berkualitas, dan tetap jadi diri sendiri.
         </p>
       </section>
 
@@ -219,7 +212,8 @@ export default async function Home(props: {
       <section className="px-5 py-20 text-center">
         <h2 className="font-serif text-3xl">Stay in the loop.</h2>
         <p className="mt-4 text-xs text-[#77746d]">
-          Get updates on new collections and exclusive releases.
+          Dapatkan informasi terkini mengenai koleksi baru dan rilisan
+          eksklusif.
         </p>
         <a
           href="#home"

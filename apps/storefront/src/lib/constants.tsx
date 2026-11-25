@@ -1,56 +1,32 @@
 import { CreditCard } from "@medusajs/icons"
-import Bancontact from "@modules/common/icons/bancontact"
-import Ideal from "@modules/common/icons/ideal"
-import PayPal from "@modules/common/icons/paypal"
 import React from "react"
 
-/* Map of payment provider_id to their title and icon. Add in any payment providers you want to use. */
 export const paymentInfoMap: Record<
   string,
   { title: string; icon: React.JSX.Element }
 > = {
   pp_stripe_stripe: {
-    title: "Credit card",
+    title: "Kartu Kredit",
     icon: <CreditCard />,
   },
-  "pp_stripe-ideal_stripe": {
-    title: "iDeal",
-    icon: <Ideal />,
-  },
-  "pp_stripe-bancontact_stripe": {
-    title: "Bancontact",
-    icon: <Bancontact />,
-  },
-  pp_paypal_paypal: {
-    title: "PayPal",
-    icon: <PayPal />,
-  },
+
   pp_system_default: {
-    title: "Manual Payment",
+    title: "Pembayaran Manual",
     icon: <CreditCard />,
   },
-  // Add more payment providers here
 }
 
-/*
- * Medusa Payments registers one provider per payment account, with the ID
- * `pp_medusa-payments_{account}`, where `{account}` is the Medusa Cloud payment account ID.
- */
 const MEDUSA_PAYMENTS_PREFIX = "pp_medusa-payments_"
 
 const medusaPaymentsInfo = {
-  title: "Credit card",
+  title: "Kartu Kredit",
   icon: <CreditCard />,
 }
 
-/*
- * Adyen registers its provider with the ID `pp_adyen_{id}`, where `{id}` is the ID set in
- * `medusa-config.ts`. Its Drop-in offers cards, Apple Pay, and Google Pay.
- */
 const ADYEN_PREFIX = "pp_adyen_"
 
 const adyenInfo = {
-  title: "Card, Apple Pay, or Google Pay",
+  title: "Kartu Kredit / Dompet Digital",
   icon: <CreditCard />,
 }
 
@@ -78,20 +54,18 @@ export const isMedusaPayments = (providerId?: string) => {
   return !!providerId?.startsWith(MEDUSA_PAYMENTS_PREFIX)
 }
 
-// Medusa Payments returns the Stripe account that holds the payment, which Stripe.js has to be initialized with.
-// It isn't derived from the provider ID, as non-production environments take payments with a sandbox account.
 export const getMedusaPaymentsAccount = (paymentSession?: {
   provider_id: string
   data?: Record<string, unknown>
 }) => {
   const account = paymentSession?.data?.stripe_account
+
   return isMedusaPayments(paymentSession?.provider_id) &&
     typeof account === "string"
     ? account
     : undefined
 }
 
-// This only checks if it is native stripe or medusa payments for card payments, it ignores the other stripe-based providers
 export const isStripeLike = (providerId?: string) => {
   return providerId?.startsWith("pp_stripe_") || isMedusaPayments(providerId)
 }
@@ -99,29 +73,9 @@ export const isStripeLike = (providerId?: string) => {
 export const isPaypal = (providerId?: string) => {
   return providerId?.startsWith("pp_paypal")
 }
+
 export const isManual = (providerId?: string) => {
   return providerId?.startsWith("pp_system_default")
 }
 
-// Add currencies that don't need to be divided by 100
-export const noDivisionCurrencies = [
-  "krw",
-  "jpy",
-  "vnd",
-  "clp",
-  "pyg",
-  "xaf",
-  "xof",
-  "bif",
-  "djf",
-  "gnf",
-  "kmf",
-  "mga",
-  "rwf",
-  "xpf",
-  "htg",
-  "vuv",
-  "xag",
-  "xdr",
-  "xau",
-]
+export const noDivisionCurrencies: string[] = []

@@ -74,7 +74,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
     return (
       <div className="flex flex-col font-semibold" data-testid="current-info">
         <span>
-          {billingAddress.first_name} {billingAddress.last_name}
+          {billingAddress.first_name} {billingAddress.last_name || ""}
         </span>
         <span>{billingAddress.company}</span>
         <span>
@@ -92,6 +92,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
   return (
     <form action={formAction} onReset={() => clearState()} className="w-full">
       <input type="hidden" name="addressId" value={billingAddress?.id} />
+
       <AccountInfo
         label="Billing address"
         currentInfo={currentInfo}
@@ -109,20 +110,22 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
               required
               data-testid="billing-first-name-input"
             />
+
             <Input
-              label="Last name"
+              label="Last name (Opsional)"
               name="last_name"
               defaultValue={billingAddress?.last_name || undefined}
-              required
               data-testid="billing-last-name-input"
             />
           </div>
+
           <Input
             label="Company"
             name="company"
             defaultValue={billingAddress?.company || undefined}
             data-testid="billing-company-input"
           />
+
           <Input
             label="Phone"
             name="phone"
@@ -132,6 +135,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
             defaultValue={billingAddress?.phone ?? customer?.phone ?? ""}
             data-testid="billing-phone-input"
           />
+
           <Input
             label="Address"
             name="address_1"
@@ -139,12 +143,14 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
             required
             data-testid="billing-address-1-input"
           />
+
           <Input
             label="Apartment, suite, etc."
             name="address_2"
             defaultValue={billingAddress?.address_2 || undefined}
             data-testid="billing-address-2-input"
           />
+
           <div className="grid grid-cols-[144px_1fr] gap-x-2">
             <Input
               label="Postal code"
@@ -153,6 +159,7 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
               required
               data-testid="billing-postcal-code-input"
             />
+
             <Input
               label="City"
               name="city"
@@ -161,12 +168,14 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
               data-testid="billing-city-input"
             />
           </div>
+
           <Input
             label="Province"
             name="province"
             defaultValue={billingAddress?.province || undefined}
             data-testid="billing-province-input"
           />
+
           <NativeSelect
             name="country_code"
             defaultValue={billingAddress?.country_code || undefined}

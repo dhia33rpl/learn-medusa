@@ -12,12 +12,12 @@ import LanguageSelect from "../language-select"
 import { Locale } from "@lib/data/locales"
 
 const SideMenuItems = {
-  Home: "/",
-  Women: "/categories/women",
-  Men: "/categories/men",
-  Collection: "/store",
-  Account: "/account",
-  Bag: "/cart",
+  Menu: "/",
+  Wanita: "/categories/wanita",
+  Pria: "/categories/pria",
+  Koleksi: "/store",
+  Akun: "/account",
+  Keranjang: "/cart",
 }
 
 type SideMenuProps = {

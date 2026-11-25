@@ -35,7 +35,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
           className="whitespace-pre-line text-sm leading-7 text-[#77746d]"
           data-testid="product-description"
         >
-          {product.description}
+          {product.description || "Belum ada deskripsi untuk produk ini."}
         </p>
       </div>
     </div>

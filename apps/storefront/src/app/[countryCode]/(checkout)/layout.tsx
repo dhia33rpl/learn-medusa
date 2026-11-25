@@ -16,8 +16,8 @@ export default function CheckoutLayout({
             data-testid="back-to-cart-link"
           >
             <ChevronDown className="rotate-90" size={16} />
-            <span className="mt-px hidden small:block">Back to bag</span>
-            <span className="mt-px block small:hidden">Back</span>
+            <span className="mt-px hidden small:block">Kembali ke keranjang </span>
+            <span className="mt-px block small:hidden">Kembali</span>
           </LocalizedClientLink>
 
           <LocalizedClientLink
@@ -37,7 +37,7 @@ export default function CheckoutLayout({
       </div>
 
       <div className="flex w-full items-center justify-center py-6 text-[10px] uppercase tracking-widest text-[#77746d]">
-        © 2026 VELORA. All rights reserved.
+        © 2026 VELORA. Hak cipta dilindungi.
       </div>
     </div>
   )
