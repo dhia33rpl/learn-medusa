@@ -5,7 +5,6 @@ import Input from "@modules/common/components/input"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
 
 type Props = {
@@ -17,41 +16,42 @@ const Register = ({ setCurrentView }: Props) => {
 
   return (
     <div
-      className="max-w-sm flex flex-col items-center"
+      className="flex max-w-sm flex-col items-center text-[#24231f]"
       data-testid="register-page"
     >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+      <p className="mb-3 text-[10px] tracking-[4px] text-[#a18d72]">DAFTAR</p>
+
+      <h1 className="mb-4 text-center font-serif text-2xl font-light uppercase tracking-wide">
+        Jadi Member VELORA
       </h1>
 
-      <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+      <p className="mb-6 text-center text-sm leading-7 text-[#77746d]">
+        Buat akunmu untuk belanja lebih cepat, menyimpan alamat, dan memantau
+        pesananmu.
       </p>
 
       {message?.state === "verification_required" && (
         <div
-          className="w-full mb-4 text-center text-base-regular text-ui-fg-base bg-ui-bg-subtle border border-ui-border-base rounded-rounded p-4"
+          className="mb-4 w-full border border-[#e9e6df] bg-white p-4 text-center text-sm"
           data-testid="register-verification-message"
         >
-          We sent a verification link to <strong>{message.email}</strong>.
-          Please check your inbox to verify your email, then sign in.
+          Kami mengirim tautan verifikasi ke <strong>{message.email}</strong>.
+          Cek kotak masukmu untuk memverifikasi email, lalu masuk.
         </div>
       )}
 
-      <form className="w-full flex flex-col" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
+      <form className="flex w-full flex-col" action={formAction}>
+        <div className="flex w-full flex-col gap-y-2">
           <Input
-            label="First name"
+            label="Nama depan"
             name="first_name"
             required
             autoComplete="given-name"
             data-testid="first-name-input"
           />
 
-          {/* Last name sekarang opsional */}
           <Input
-            label="Last name (Opsional)"
+            label="Nama belakang (opsional)"
             name="last_name"
             autoComplete="family-name"
             data-testid="last-name-input"
@@ -67,7 +67,7 @@ const Register = ({ setCurrentView }: Props) => {
           />
 
           <Input
-            label="Phone"
+            label="Nomor telepon"
             name="phone"
             type="tel"
             autoComplete="tel"
@@ -75,7 +75,7 @@ const Register = ({ setCurrentView }: Props) => {
           />
 
           <Input
-            label="Password"
+            label="Kata sandi"
             name="password"
             required
             type="password"
@@ -89,36 +89,23 @@ const Register = ({ setCurrentView }: Props) => {
           data-testid="register-error"
         />
 
-        <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
-          <LocalizedClientLink
-            href="/content/privacy-policy"
-            className="underline"
-          >
-            Privacy Policy
-          </LocalizedClientLink>{" "}
-          and{" "}
-          <LocalizedClientLink
-            href="/content/terms-of-use"
-            className="underline"
-          >
-            Terms of Use
-          </LocalizedClientLink>
-          .
+        <span className="mt-6 text-center text-xs leading-6 text-[#77746d]">
+          Dengan membuat akun, kamu menyetujui kebijakan privasi dan syarat
+          penggunaan VELORA.
         </span>
 
-        <SubmitButton className="w-full mt-6" data-testid="register-button">
-          Join
+        <SubmitButton className="mt-6 w-full" data-testid="register-button">
+          Daftar
         </SubmitButton>
       </form>
 
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
+      <span className="mt-6 text-center text-sm text-[#77746d]">
+        Sudah punya akun?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="underline"
+          className="underline underline-offset-4 transition hover:text-[#a18d72]"
         >
-          Sign in
+          Masuk
         </button>
         .
       </span>
