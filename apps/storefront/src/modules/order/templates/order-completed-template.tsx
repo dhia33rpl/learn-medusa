@@ -27,22 +27,22 @@ const BANK_ACCOUNTS: Record<
   bca: {
     name: "BCA",
     accountNumber: "1234567890",
-    accountHolder: "Nama Pemilik BCA",
+    accountHolder: "Andrian Pradipta",
   },
   bri: {
     name: "BRI",
     accountNumber: "0987654321012",
-    accountHolder: "Nama Pemilik BRI",
+    accountHolder: "Jane doe",
   },
   bni: {
     name: "BNI",
     accountNumber: "1122334455",
-    accountHolder: "Nama Pemilik BNI",
+    accountHolder: "john doe",
   },
   mandiri: {
     name: "Mandiri",
     accountNumber: "1230009876543",
-    accountHolder: "Nama Pemilik Mandiri",
+    accountHolder: "Julian Smith",
   },
 }
 

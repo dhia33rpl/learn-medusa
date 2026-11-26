@@ -25,19 +25,19 @@ export default function CustomerServicePage() {
             <span className="text-[10px] uppercase tracking-[3px] text-[#a18d72]">
               WhatsApp
             </span>
-            <span className="text-[#24231f]">+62 800 0000 0000</span>
+            <span className="text-[#24231f]">+62 812 0000 0000</span>
           </div>
           <div className="flex flex-col gap-y-1">
             <span className="text-[10px] uppercase tracking-[3px] text-[#a18d72]">
               Email
             </span>
-            <span className="text-[#24231f]">help@example.com</span>
+            <span className="text-[#24231f]">halo@velora.com</span>
           </div>
           <div className="flex flex-col gap-y-1">
             <span className="text-[10px] uppercase tracking-[3px] text-[#a18d72]">
               Telepon
             </span>
-            <span className="text-[#24231f]">Every day, 09.00–17.00 WIB</span>
+            <span className="text-[#24231f]">Senin-Sabtu, 09.00–17.00 WIB</span>
           </div>
         </div>
       </div>
