@@ -15,13 +15,13 @@ export default function Footer() {
           <h3 className="text-[10px] tracking-[3px]">JELAJAHI</h3>
           <div className="mt-5 flex flex-col gap-3 text-xs text-white/65">
             <LocalizedClientLink
-              href="/categories/women"
+              href="/categories/wanita"
               className="transition hover:text-white"
             >
               Wanita
             </LocalizedClientLink>
             <LocalizedClientLink
-              href="/categories/men"
+              href="/categories/pria"
               className="transition hover:text-white"
             >
               Pria
